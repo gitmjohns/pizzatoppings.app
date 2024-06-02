@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose my pizza toppings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color, #f0e6d6);
+            color: var(--text-color, #333);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--container-bg-color, #fff);
+            position: relative;
+        }
+        .dark-mode {
+            --background-color: #1e1e1e;
+            --text-color: #f0e6d6;
+            --container-bg-color: #2c2c2c;
+        }
+        .toggle-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .toppings {
+            list-style-type: none;
+            padding: 0;
+        }
+        .toppings li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: var(--container-bg-color, #fff);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .release-button {
+            background-color: #e74c3c;
+        }
+        .keep-button {
+            background-color: #27ae60;
+        }
+        .slider-container {
+            margin: 20px 0;
+        }
+        .advertise-section {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .advertise-section a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <div class="toggle-container">
+            <label>
+                <input type="checkbox" id="darkModeToggle" onclick="toggleMode()"> Dark mode
+            </label>
+        </div>
+        <h1>Choose my pizza toppings</h1>
+        <label>
+            <input type="checkbox" id="vegetarianCheckbox"> Make it vegetarian
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="artisanCheckbox"> Include artisan toppings
+        </label>
+        <div class="slider-container">
+            <label for="quantitySlider">Quantity</label>
+            <input type="range" id="quantitySlider" min="2" max="8" value="5">
+        </div>
+        <button onclick="generateToppings()">Generate Toppings</button>
+        <ul class="toppings" id="toppingsList"></ul>
+    </div>
+    <div class="container advertise-section">
+        <h2>Advertise pizza-related products here</h2>
+        <a href="mailto:mjohns84@gmail.com">Email me</a>
+    </div>
+    <script>
+        const toppings = [
+            { name: 'Pepperoni', vegetarian: false, artisan: false },
+            { name: 'Mushrooms', vegetarian: true, artisan: false },
+            { name: 'Onions', vegetarian: true, artisan: false },
+            { name: 'Sausage', vegetarian: false, artisan: false },
+            { name: 'Bacon', vegetarian: false, artisan: false },
+            { name: 'Extra cheese', vegetarian: true, artisan: false },
+            { name: 'Black olives', vegetarian: true, artisan: false },
+            { name: 'Green peppers', vegetarian: true, artisan: false },
+            { name: 'Pineapple', vegetarian: true, artisan: false },
+            { name: 'Spinach', vegetarian: true, artisan: false },
+            { name: 'Banana peppers', vegetarian: true, artisan: false },
+            { name: 'Arugula', vegetarian: true, artisan: true },
+            { name: 'Fresh Mozzarella', vegetarian: true, artisan: true },
+            { name: 'Basil Leaves', vegetarian: true, artisan: true },
+            { name: 'Shallots', vegetarian: true, artisan: true },
+            { name: 'Capers', vegetarian: true, artisan: true },
+            { name: 'Sun-dried tomatoes', vegetarian: true, artisan: true },
+            { name: 'Prosciutto', vegetarian: false, artisan: true },
+            { name: 'Artichoke', vegetarian: true, artisan: true },
+            { name: 'Brie cheese', vegetarian: true, artisan: true },
+            { name: 'Uncured salami', vegetarian: false, artisan: true },
+            { name: 'Chorizo', vegetarian: false, artisan: true },
+            { name: 'Blue cheese', vegetarian: true, artisan: true },
+            { name: 'Roasted garlic', vegetarian: true, artisan: true }
+        ];
+
+        let keptToppings = [];
+
+        function generateToppings() {
+            const isVegetarian = document.getElementById('vegetarianCheckbox').checked;
+            const includeArtisan = document.getElementById('artisanCheckbox').checked;
+            const quantity = document.getElementById('quantitySlider').value;
+            let availableToppings = toppings.filter(t => !isVegetarian || t.vegetarian);
+
+            if (!includeArtisan) {
+                availableToppings = availableToppings.filter(t => !t.artisan);
+            }
+
+            let randomToppings = [];
+            while (randomToppings.length < quantity) {
+                const topping = availableToppings[Math.floor(Math.random() * availableToppings.length)];
+                if (!randomToppings.includes(topping) && !keptToppings.includes(topping)) {
+                    randomToppings.push(topping);
+                }
+                if (randomToppings.length + keptToppings.length >= quantity) {
+                    break;
+                }
+            }
+
+            const toppingsList = document.getElementById('toppingsList');
+            toppingsList.innerHTML = '';
+
+            keptToppings.forEach(topping => {
+                const listItem = document.createElement('li');
+                listItem.textContent = topping.name;
+                toppingsList.appendChild(listItem);
+
+                const releaseButton = document.createElement('button');
+                releaseButton.textContent = 'Release';
+                releaseButton.className = 'release-button';
+                releaseButton.onclick = () => releaseTopping(topping, listItem);
+                listItem.appendChild(releaseButton);
+            });
+
+            randomToppings.forEach(topping => {
+                const listItem = document.createElement('li');
+                listItem.textContent = topping.name;
+                toppingsList.appendChild(listItem);
+
+                const keepButton = document.createElement('button');
+                keepButton.textContent = 'Keep';
+                keepButton.className = 'keep-button';
+                keepButton.onclick = () => keepTopping(topping, listItem);
+                listItem.appendChild(keepButton);
+            });
+
+            if (keptToppings.length > quantity) {
+                const message = document.createElement('p');
+                message.textContent = 'You have more kept toppings than the selected quantity.';
+                toppingsList.appendChild(message);
+            }
+        }
+
+        function keepTopping(topping, listItem) {
+            keptToppings.push(topping);
+            listItem.removeChild(listItem.querySelector('.keep-button'));
+
+            const releaseButton = document.createElement('button');
+            releaseButton.textContent = 'Release';
+            releaseButton.className = 'release-button';
+            releaseButton.onclick = () => releaseTopping(topping, listItem);
+            listItem.appendChild(releaseButton);
+        }
+
+        function releaseTopping(topping, listItem) {
+            keptToppings = keptToppings.filter(t => t !== topping);
+            listItem.removeChild(listItem.querySelector('.release-button'));
+
+            const keepButton = document.createElement('button');
+            keepButton.textContent = 'Keep';
+            keepButton.className = 'keep-button';
+            keepButton.onclick = () => keepTopping(topping, listItem);
+            listItem.appendChild(keepButton);
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
