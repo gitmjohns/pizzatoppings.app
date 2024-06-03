@@ -62,13 +62,22 @@
         .slider-container {
             margin: 20px 0;
         }
-        .advertise-section {
+        .social-media {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
         }
-        .advertise-section a {
+        .social-media a {
             color: #3498db;
             text-decoration: none;
+            margin: 0 10px;
+        }
+        .social-media img {
+            width: 40px;
+            height: 40px;
+        }
+        .checkbox-label {
+            display: inline-block;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -80,11 +89,11 @@
             </label>
         </div>
         <h1>Choose my pizza toppings</h1>
-        <label>
+        <label class="checkbox-label">
             <input type="checkbox" id="vegetarianCheckbox"> Make it vegetarian
         </label>
         <br>
-        <label>
+        <label class="checkbox-label">
             <input type="checkbox" id="artisanCheckbox"> Include artisan toppings
         </label>
         <div class="slider-container">
@@ -94,9 +103,13 @@
         <button onclick="generateToppings()">Generate Toppings</button>
         <ul class="toppings" id="toppingsList"></ul>
     </div>
-    <div class="container advertise-section">
-        <h2>Advertise pizza-related products here</h2>
-        <a href="mailto:mjohns84@gmail.com">Email me</a>
+    <div class="container social-media">
+        <a href="https://www.instagram.com" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+        </a>
+        <a href="https://twitter.com" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg" alt="X">
+        </a>
     </div>
     <script>
         const toppings = [
